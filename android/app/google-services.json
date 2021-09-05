@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1093611377583",
+    "project_id": "music-ad504",
+    "storage_bucket": "music-ad504.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093611377583:android:f74e452f993f3503b2555a",
+        "android_client_info": {
+          "package_name": "com.hieu.online_musci_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093611377583-ginl9brski1q3rqco6hhbi7gfr0f9bul.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0h0nY3P20bV_iDOAX5YuVHVdcKdnGkhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093611377583-ginl9brski1q3rqco6hhbi7gfr0f9bul.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
