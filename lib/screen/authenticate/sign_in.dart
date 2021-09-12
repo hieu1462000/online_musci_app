@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:online_musci_app/service/auth.dart';
@@ -142,23 +143,50 @@ class _SignInState extends State<SignIn> {
               ),
               Positioned(
                   bottom: 20,
-                  left: 25,
-                  child: RichText(
-                      text: TextSpan(
-                    text: "Don't have an account?",
-                    style: TextStyle(color: Colors.black),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: ' Register now!',
-                        style: TextStyle(color: Colors.orange[900]),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // Single tapped.
-                            widget.swapView();
-                          },
-                      ),
-                    ],
-                  )))
+                  child: Container(
+                    child: Column(
+                      children:[
+                        SizedBox(
+                          width: 300,
+                          height: 40,
+                          child: RaisedButton(
+                            onPressed: () async {
+                                await _auth.signInWithGoogle();
+                            },
+                            child: Row(
+                              children: [
+                                Image.asset('assets/icons8-google-48.png',height: 25,width: 25,),
+                                SizedBox(width: 30,),
+                                Text("Continue with Google",style: TextStyle(color: Colors.white),)
+                              ],
+                            ),
+                            color: Colors.red[400],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(right: 20),
+                          child: RichText(
+                            text: TextSpan(
+                          text: "Don't have an account?",
+                          style: TextStyle(color: Colors.black),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: ' Register now!',
+                              style: TextStyle(color: Colors.orange[900]),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  // Single tapped.
+                                  widget.swapView();
+                                },
+                            ),
+                          ],
+                      )),
+                        ),]
+                    ),
+                  ))
             ]),
           )),
     );
