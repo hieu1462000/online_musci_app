@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'package:online_musci_app/service/auth.dart';
+import 'package:online_musci_app/service/loading.dart';
 
 class SignIn extends StatefulWidget {
   final Function swapView;
@@ -15,14 +18,15 @@ class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
+  bool loading = false;
   bool _showPassword = true;
   String error = "";
   String email = "";
   String password = "";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue[50],
+    return loading ? Loading() : Scaffold(
+      backgroundColor: Colors.blue[100],
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         title: Center(
@@ -41,17 +45,18 @@ class _SignInState extends State<SignIn> {
                   ),
                   Align(
                       alignment: Alignment.bottomLeft,
-                      child: Text("Email address")),
+                      child: Text("Email address",style: TextStyle(color: Colors.black),)),
                   SizedBox(
                     height: 5,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
+                      fillColor: Colors.grey,
                       contentPadding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 10),
                       hintText: 'Type your email address here.',
                       hintStyle:
-                          TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+                          TextStyle(fontSize: 12, fontStyle: FontStyle.italic,color: Colors.grey[800]),
                       border: OutlineInputBorder(),
                     ),
                     validator: (val) => val.isEmpty ? "Enter an email" : null,
@@ -65,7 +70,7 @@ class _SignInState extends State<SignIn> {
                     height: 20,
                   ),
                   Align(
-                      alignment: Alignment.bottomLeft, child: Text("Password")),
+                      alignment: Alignment.bottomLeft, child: Text("Password",style: TextStyle(color: Colors.black))),
                   SizedBox(
                     height: 5,
                   ),
@@ -76,7 +81,7 @@ class _SignInState extends State<SignIn> {
                           vertical: 10.0, horizontal: 10),
                       hintText: "Type your password here.",
                       hintStyle:
-                          TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+                          TextStyle(fontSize: 12, fontStyle: FontStyle.italic,color: Colors.grey[800]),
                       suffix: GestureDetector(
                         child: Icon(
                           _showPassword
@@ -111,17 +116,21 @@ class _SignInState extends State<SignIn> {
                     child: RaisedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
                           dynamic result = await _auth
                               .signInWithEmailAndPassword(email, password);
                           if (result == null) {
                             setState(() {
                               error =
                                   "Wrong password or couldn't find your email";
+                              loading = false;
                             });
                           }
                         }
                       },
-                      color: Colors.blue[800],
+                      color: Colors.blue[400],
                       child: Text(
                         "Get started",
                         style: TextStyle(
@@ -144,31 +153,45 @@ class _SignInState extends State<SignIn> {
               Positioned(
                   bottom: 20,
                   child: Container(
-                    child: Column(
-                      children:[
-                        SizedBox(
-                          width: 300,
-                          height: 40,
-                          child: RaisedButton(
-                            onPressed: () async {
-                                await _auth.signInWithGoogle();
-                            },
-                            child: Row(
-                              children: [
-                                Image.asset('assets/icons8-google-48.png',height: 25,width: 25,),
-                                SizedBox(width: 30,),
-                                Text("Continue with Google",style: TextStyle(color: Colors.white),)
-                              ],
-                            ),
-                            color: Colors.red[400],
-                          ),
+                    child: Column(children: [
+                      SizedBox(
+                        width: 300,
+                        height: 40,
+                        child: SignInButton(
+                          Buttons.Google,
+                          onPressed: () async{
+                            setState(() {
+                              loading = true;
+                            });
+                            await _auth.signInWithGoogle();
+                          },
+                        )
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        width: 300,
+                        height: 40,
+                        child: SignInButton(
+                          Buttons.FacebookNew,
+                          onPressed: () async {
+                            setState(() {
+                              loading = true;
+                            });
+                             dynamic result = await _auth.signInWithFacebook();
+                             if (result == null) {
+                               loading = false;
+                             }
+                          },
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(right: 20),
-                          child: RichText(
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(right: 20),
+                        child: RichText(
                             text: TextSpan(
                           text: "Don't have an account?",
                           style: TextStyle(color: Colors.black),
@@ -183,9 +206,9 @@ class _SignInState extends State<SignIn> {
                                 },
                             ),
                           ],
-                      )),
-                        ),]
-                    ),
+                        )),
+                      ),
+                    ]),
                   ))
             ]),
           )),

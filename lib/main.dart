@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:online_musci_app/model/user_model.dart';
+import 'package:online_musci_app/screen/app_view.dart';
 import 'package:online_musci_app/service/auth.dart';
-import 'file:///D:/AndroidStudioProjects/online_musci_app/lib/screen/app_view.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

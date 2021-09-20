@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:online_musci_app/service/auth.dart';
+import 'package:online_musci_app/service/loading.dart';
 
 class Register extends StatefulWidget {
   final Function swapView;
-
   Register({this.swapView});
 
 
@@ -16,14 +16,15 @@ class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
+  bool loading = false;
   bool _showPassword = true;
   String error ="";
   String email = "";
   String password = "";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue[50],
+    return loading ? Loading() : Scaffold(
+      backgroundColor: Colors.blue[100],
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         title: Center(
@@ -112,17 +113,21 @@ class _RegisterState extends State<Register> {
                     child: RaisedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
+                          setState(() {
+                            loading = true;
+                          });
                           dynamic result = await _auth
                               .registerWithEmailAndPassword(email, password);
                           if (result == null) {
                             setState(() {
                               error =
                               "Please supply a valid email!";
+                              loading = false;
                             });
                           }
                         }
                       },
-                      color: Colors.blue[800],
+                      color: Colors.blue[400],
                       child: Text(
                         "Create account",
                         style: TextStyle(
